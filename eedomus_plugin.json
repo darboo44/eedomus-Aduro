@@ -1,0 +1,76 @@
+{
+    "plugin_id": "aduro",
+    "name_fr": "Aduro",
+    "icon": "aduro.png",
+    "version": "1.0",
+    "creation_date": "2019-12-04",
+    "modification_date": "2019-12-04",
+    "author": "darboo",
+    "description_fr": "Gestion du poële Aduro Hybrid",
+    "description_en": "Management of Aduro Hybrid",
+    "parameters":
+	[
+		{
+			"parameter": "ip", 
+			"description": "adresse IP :",
+			"xtype": "textfield",
+			"field": "allowBlank: false, maxLength:15, minLength:7, width: 240"
+		},
+		{
+			"parameter": "serialNumber", 
+			"description": "Numéro de série :",
+			"xtype": "textfield",
+			"field": "allowBlank: false, maxLength:6, minLength:5, width: 240"
+		},
+		{
+			"parameter": "password", 
+			"description": "Mot de passe :",
+			"xtype": "textfield",
+			"field": "allowBlank: false, maxLength:10, minLength:10, width: 240"
+		},
+		{
+			"parameter": "installation", 
+			"description": "",
+			"xtype": "displayfield",
+			"field": "style: 'padding: 3px;', value: 'Cliquez <a href=\\'javascript:{var a=Ext.getCmp(\"attached_controller_id\").getValue();var b=document.getElementById(\"periph_param[`ip`]\").value;var c=document.getElementById(\"periph_param[`serialNumber`]\").value;var d=document.getElementById(\"periph_param[`password`]\").value;var u=\"https://secure.eedomus.com/box_http_query.php?controller_id=\"+a+\"&url=http%253A%252F%252Flocalhost%252Fscript%252F%253Fexec%253DAduroApp.php%2526controllerId%253D\"+a+\"%2526action%253Dinstallation%2526ip%253D\"+b+\"%2526serialNumber%253D\"+c+\"%2526password%253D\"+d;window.open(u,\"_blank\");}\\'>ici pour installer le poële</a>'"
+		}
+	],
+    "scripts":
+	[
+		{
+			"name": "AduroApp.php"
+		}
+	],        
+    "devices":
+	[
+		{
+			"device_id": "aduro_status",
+			"module_id": "41",
+			"type": "http",
+			"name_fr": "plugin.name - Etat",
+			"utilisation_id":"43",
+			"value_unit": "",
+			"icon": "status.png",
+			"parameters":
+			{
+				"VAR1": "plugin.parameters.ip",
+				"VAR2": "plugin.parameters.serialNumber",
+				"VAR3": "plugin.parameters.password",                        
+				"value_type": "list",
+				"ignore_errors": 3,
+				"RAW_URL": "http://localhost/script/?exec=AduroApp.php&action=read&ip=[VAR1]&serialNumber=[VAR2]&password=[VAR3]",
+				"RAW_XPATH": "/root/consumption",
+				"POLLING": "5"
+			},
+			"values":
+				[
+					{ "value": "0", "icon": "co2.png", "description": "Allumé", "http_url": "http://localhost/script/", "http_type": "GET",  "http_params": "/?exec=AduroApp.php&ip=[VAR1]&serialNumber=[VAR2]&password=[VAR3]&action=start"},
+					{ "value": "1", "icon": "default_off.png", "description": "Eteint", "http_url": "http://localhost/script/", "http_type": "GET",  "http_params": "/?exec=AduroApp.php&ip=[VAR1]&serialNumber=[VAR2]&password=[VAR3]&action=stop"},
+					{ "value": "2", "icon": "default_off.png", "description": "Porte ouverte"},
+					{ "value": "3", "icon": "siren_on.png", "description": "Reset Alarme", "http_url": "http://localhost/script/", "http_type": "GET",  "http_params": "/?exec=AduroApp.php&ip=[VAR1]&serialNumber=[VAR2]&password=[VAR3]&action=resetAlarm"},
+					{ "value": "5", "icon": "siren_on.png", "description": "Erreur Feu"},
+					{ "value": "6", "icon": "siren_on.png", "description": "Erreur Allumage"}
+				]     
+		}
+	]
+}
